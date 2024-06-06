@@ -6,7 +6,7 @@ vehiculos = [
     'MEDIANO',
     'GRANDE',
     'CAMIONETA 4X4',
-    'VAN'
+    'VAN',
 ]
 
 #Matriz de datos de cotización de vehiculos
@@ -22,6 +22,32 @@ datos_cotizacion = [
     ['CAMIONETA 4X4',   2.5,    10000,  800, 900],
     ['VAN',             2.8,    12000,  700, 800],
 ]
+
+#Función para obtener el tipo de vehículo del usuario
+def obtener_tipo_vehiculo():
+    print("Seleccione el tipo de vehículo:")
+    
+
+    for i in range(len(vehiculos)):
+        print(f'{i + 1}. {vehiculos[i]}')
+
+    numero_vehiculo = input("Ingrese número de vehículo a seleccionar: ")
+
+    if (int(numero_vehiculo) <= 0 or int(numero_vehiculo) > len(vehiculos)):
+        print("Número de vehículo incorrecto")
+        obtener_tipo_vehiculo()
+
+    vehiculo = vehiculos[int(numero_vehiculo) - 1]
+
+    return vehiculo
+
+#Función para obtener el recorrido en km del usuario
+def obtener_kms():
+    kms = print("Ingrese la cantidad de kilometros recorridos con el vehículo:")
+
+    if (int(kms) <= 100 or int(kms) > 5000):
+        print("Cantidad de kilometros incorrecta")
+        obtener_kms()
 
 #Función para generar datos aleatorios
 def generar_datos_aleatorios(min, max, categorias):
@@ -43,7 +69,11 @@ def generar_datos_aleatorios(min, max, categorias):
 def agregar_datos_manuales(datosIniciales):
     datos = datosIniciales
 
-    #Agregar lógica
+    vehiculo = obtener_tipo_vehiculo()
+
+    kms = obtener_kms()
+
+    datos.append([vehiculo, kms])
 
     return datos
 
