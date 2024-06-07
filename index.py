@@ -135,8 +135,7 @@ def generar_resumen(datos):
     print(f'Cantidad de vehículos: {cantidad_vehiculos}')
     print(f'Costos: {costos}')
     print(f'Facturación: {facturacion}')
-    print(" ")
-    
+    print(" ")  
 
 #Función para generar resumen por vehiculo
 def generar_resumen_por_vehiculo(datos):
@@ -150,8 +149,38 @@ def generar_resumen_por_cliente(datos):
 
 #Función para generar resumen de un vehiculo
 def generar_resumen_de_vehiculo(datos):
-    #Agregar lógica
-    return datos
+    print("Resumen del mes de un vehículo")
+    print(" ")
+    print("Seleccione el tipo de vehículo: ")
+    print(" ")
+
+    for i in range(len(vehiculos)):
+        print(f'{i + 1}. {vehiculos[i]}')
+
+    print(" ")
+    numero_vehiculo = input("Ingrese número de vehículo a seleccionar: ")
+
+    if (int(numero_vehiculo) <= 0 or int(numero_vehiculo) > len(vehiculos)):
+        print(" ")
+        print("Número de vehículo incorrecto")
+        return generar_resumen_de_vehiculo(datos)
+    
+    vehiculo = vehiculos[(int(numero_vehiculo) - 1)]
+
+    cantidad_vehiculos = 0
+    costos = 0
+    facturacion = 0
+
+    for i in range(len(datos)):
+        if datos[i][0] == vehiculo:
+            cantidad_vehiculos += 1
+            costos += calcular_costo(datos[i])
+            facturacion += calcular_facturacion(datos[i])
+        
+    print(" ")
+    print(f'Cantidad de vehículos: {cantidad_vehiculos}')
+    print(f'Costos: {costos}')
+    print(f'Facturación: {facturacion}')
 
 #Función para acceder al menu de la aplicación
 def menu():
