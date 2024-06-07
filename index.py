@@ -1,14 +1,5 @@
 import random
 
-#Tipos de vehiculos
-vehiculos = [
-    'CHICO',
-    'MEDIANO',
-    'GRANDE',
-    'CAMIONETA 4X4',
-    'VAN',
-]
-
 #Matriz de datos de cotización de vehiculos
 #Primera columna: tipo de vehiculo
 #Segunda columna: costo mantenimiento por km
@@ -22,6 +13,12 @@ datos_cotizacion = [
     ['CAMIONETA 4X4',   2.5,    10000,  800, 900],
     ['VAN',             2.8,    12000,  700, 800],
 ]
+
+#Tipos de vehiculos
+vehiculos = []
+
+for i in range(len(datos_cotizacion)):
+    vehiculos.append(datos_cotizacion[i][0])
 
 #Función para obtener el tipo de vehículo del usuario
 def obtener_tipo_vehiculo():
@@ -259,7 +256,6 @@ def menu():
     print(" ")
 
     return
-
 
 #Inicio de la aplicación
 menu()
