@@ -16,7 +16,6 @@ datos_cotizacion = [
 
 #Tipos de vehiculos
 vehiculos = []
-
 for i in range(len(datos_cotizacion)):
     vehiculos.append(datos_cotizacion[i][0])
 
@@ -24,20 +23,22 @@ for i in range(len(datos_cotizacion)):
 def obtener_tipo_vehiculo():
     print(" ")
     print("Seleccione el tipo de vehículo:")
-    
 
-    for i in range(len(vehiculos)):
+    cantidad_de_tipos = len(vehiculos)
+
+    for i in range(cantidad_de_tipos):
         print(f'{i + 1}. {vehiculos[i]}')
 
     print(" ")
-    numero_vehiculo = input("Ingrese número de vehículo a seleccionar: ")
+    vehiculo_seleccionado = input("Ingrese número de vehículo a seleccionar: ")
+    numero_vehiculo = int(vehiculo_seleccionado)
 
-    if (int(numero_vehiculo) <= 0 or int(numero_vehiculo) > len(vehiculos)):
+    if (numero_vehiculo <= 0 or numero_vehiculo > cantidad_de_tipos):
         print(" ")
-        print("Número de vehículo incorrecto")
+        print("Número de vehículo inválido")
         return obtener_tipo_vehiculo()
 
-    vehiculo = vehiculos[(int(numero_vehiculo) - 1)]
+    vehiculo = vehiculos[(numero_vehiculo - 1)]
 
     return vehiculo
 
@@ -56,48 +57,48 @@ def obtener_kms():
 #Función para calcular el costo de mantenimiento
 def calcular_costo(dato):
     vehiculo = dato[0]
-    kms = dato[1]
+    kms_recorridos = dato[1]
 
     for i in range(len(datos_cotizacion)):
         if (datos_cotizacion[i][0] == vehiculo):
-            costo = datos_cotizacion[i][1] * kms
+            costo = datos_cotizacion[i][1] * kms_recorridos
             return costo
 
 #Función para calcular la facturación
 def calcular_facturacion(dato):
     vehiculo = dato[0]
-    kms = dato[1]
+    kms_recorridos = dato[1]
 
-    kms_1000_to_3000 = 0
-    kms_3000_to_5000 = 0
+    kms_cotizacion_media = 0
+    kms_cotizacion_alta = 0
 
-    if kms > 1000 and kms <= 3000:
-        kms_1000_to_3000 = kms - 1000
-    elif kms > 3000:
-        kms_1000_to_3000 = 2000
-        kms_3000_to_5000 = kms - 3000
+    if kms_recorridos > 1000 and kms_recorridos <= 3000:
+        kms_cotizacion_media = kms_recorridos - 1000
+    elif kms_recorridos > 3000:
+        kms_cotizacion_media = 3000 - 1000
+        kms_cotizacion_alta = kms_recorridos - 3000
 
     for i in range(len(datos_cotizacion)):
         if (datos_cotizacion[i][0] == vehiculo):
             facturacion = 0
             facturacion += datos_cotizacion[i][2]
-            facturacion += datos_cotizacion[i][3] * kms_1000_to_3000
-            facturacion += datos_cotizacion[i][4] * kms_3000_to_5000
+            facturacion += datos_cotizacion[i][3] * kms_cotizacion_media
+            facturacion += datos_cotizacion[i][4] * kms_cotizacion_alta
             return facturacion
 
 #Función para generar datos aleatorios
-def generar_datos_aleatorios(min, max, categorias):
+def generar_datos_aleatorios(min, max):
     datos_aleatorios = []
 
     cantidad_de_datos = random.randint(min, max)
 
-    cantidad_de_categorias = len(categorias) - 1
+    cantidad_de_tipos = len(vehiculos) - 1
 
-    for i in range(cantidad_de_datos):
-        categoria = categorias[random.randint(0, cantidad_de_categorias)]
+    for _ in range(cantidad_de_datos):
+        vehiculo = vehiculos[random.randint(0, cantidad_de_tipos)]
         km_recorridos = random.randint(100, 5000)
 
-        datos_aleatorios.append([categoria, km_recorridos])
+        datos_aleatorios.append([vehiculo, km_recorridos])
 
     return datos_aleatorios
 
@@ -206,7 +207,7 @@ def menu():
             print(" ")
             print("Generar datos del mes")
             print(" ")
-            datos = generar_datos_aleatorios(200, 450, vehiculos)
+            datos = generar_datos_aleatorios(200, 450)
             print('Datos generados correctamente')
             print(f'Cantidad de clientes: {len(datos)}')
             print(" ")
