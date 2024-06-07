@@ -38,7 +38,7 @@ def obtener_tipo_vehiculo():
     if (int(numero_vehiculo) <= 0 or int(numero_vehiculo) > len(vehiculos)):
         print(" ")
         print("Número de vehículo incorrecto")
-        obtener_tipo_vehiculo()
+        return obtener_tipo_vehiculo()
 
     vehiculo = vehiculos[(int(numero_vehiculo) - 1)]
 
@@ -52,9 +52,41 @@ def obtener_kms():
     if (int(kms) < 100 or int(kms) > 5000):
         print(" ")
         print("Cantidad de kilometros incorrecta")
-        obtener_kms()
+        return obtener_kms()
     
     return int(kms)
+
+#Función para calcular el costo de mantenimiento
+def calcular_costo(dato):
+    vehiculo = dato[0]
+    kms = dato[1]
+
+    for i in range(len(datos_cotizacion)):
+        if (datos_cotizacion[i][0] == vehiculo):
+            costo = datos_cotizacion[i][1] * kms
+            return costo
+
+#Función para calcular la facturación
+def calcular_facturacion(dato):
+    vehiculo = dato[0]
+    kms = dato[1]
+
+    kms_1000_to_3000 = 0
+    kms_3000_to_5000 = 0
+
+    if kms > 1000 and kms <= 3000:
+        kms_1000_to_3000 = kms - 1000
+    elif kms > 3000:
+        kms_1000_to_3000 = 2000
+        kms_3000_to_5000 = kms - 3000
+
+    for i in range(len(datos_cotizacion)):
+        if (datos_cotizacion[i][0] == vehiculo):
+            facturacion = 0
+            facturacion += datos_cotizacion[i][2]
+            facturacion += datos_cotizacion[i][3] * kms_1000_to_3000
+            facturacion += datos_cotizacion[i][4] * kms_3000_to_5000
+            return facturacion
 
 #Función para generar datos aleatorios
 def generar_datos_aleatorios(min, max, categorias):
@@ -88,8 +120,23 @@ def agregar_datos_manuales(datosIniciales):
 
 #Función para generar resumen
 def generar_resumen(datos):
-    #Agregar lógica
-    return datos
+    print(" ")
+    print("Resumen del mes")
+    print(" ")
+
+    cantidad_vehiculos = len(datos)
+    costos = 0
+    facturacion = 0
+
+    for i in range(len(datos)):
+        costos += calcular_costo(datos[i])
+        facturacion += calcular_facturacion(datos[i])
+
+    print(f'Cantidad de vehículos: {cantidad_vehiculos}')
+    print(f'Costos: {costos}')
+    print(f'Facturación: {facturacion}')
+    print(" ")
+    
 
 #Función para generar resumen por vehiculo
 def generar_resumen_por_vehiculo(datos):
@@ -170,6 +217,8 @@ def menu():
             print("Salir")
             print(" ")
             bandera = False
+        elif opcion == '8':
+            print(datos)
         else:
             print(" ")
             print("Opción incorrecta")
