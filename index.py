@@ -94,19 +94,19 @@ def calcular_facturacion(cliente):
             return facturacion
 
 #Función para ordenar descendentemente resumenes de clientes por facturación
-#datos: [vehiculo, kms_recorridos, costos, facturacion][]
-def ordenar_resumen_clientes(datos):
-    cantidad_clientes = len(datos)
+#resumen_clientes: [vehiculo, kms_recorridos, costos, facturacion][]
+def ordenar_resumen_clientes(resumen_clientes):
+    cantidad_clientes = len(resumen_clientes)
 
     for i in range(cantidad_clientes - 1):
         for j in range(i + 1, cantidad_clientes):
-            resumen_cliente_a = datos[i]
-            resumen_cliente_b = datos[j]
+            resumen_cliente_a = resumen_clientes[i]
+            resumen_cliente_b = resumen_clientes[j]
             facturacion_a = resumen_cliente_a[3]
             facturacion_b = resumen_cliente_b[3]
             if facturacion_a < facturacion_b:
-                datos[i] = resumen_cliente_b
-                datos[j] = resumen_cliente_a
+                resumen_clientes[i] = resumen_cliente_b
+                resumen_clientes[j] = resumen_cliente_a
 
     return datos
 
