@@ -14,6 +14,11 @@ datos_cotizacion = [
     ['VAN',             2.8,    12000,  700, 800],
 ]
 
+min_clientes = 200
+max_clientes = 450
+min_kms_recorridos = 100
+max_kms_recorridos = 5000
+
 #Tipos de vehiculos
 vehiculos = []
 for i in range(len(datos_cotizacion)):
@@ -45,19 +50,20 @@ def obtener_tipo_vehiculo():
 #Función para obtener el recorrido en km del usuario
 def obtener_kms():
     print(" ")
-    kms = input("Ingrese la cantidad de kilometros recorridos con el vehículo: ")
+    kms = input("Ingrese la cantidad de kilómetros recorridos con el vehículo: ")
 
-    if (int(kms) < 100 or int(kms) > 5000):
+    if (int(kms) < min_kms_recorridos or int(kms) > max_kms_recorridos):
         print(" ")
-        print("Cantidad de kilometros incorrecta")
+        print("Cantidad de kilómetros incorrecta")
         return obtener_kms()
     
     return int(kms)
 
 #Función para calcular el costo de mantenimiento
-def calcular_costo(dato):
-    vehiculo = dato[0]
-    kms_recorridos = dato[1]
+#cliente: [vehiculo, kms_recorridos]
+def calcular_costo(cliente):
+    vehiculo = cliente[0]
+    kms_recorridos = cliente[1]
 
     for i in range(len(datos_cotizacion)):
         if (datos_cotizacion[i][0] == vehiculo):
@@ -65,9 +71,10 @@ def calcular_costo(dato):
             return costo
 
 #Función para calcular la facturación
-def calcular_facturacion(dato):
-    vehiculo = dato[0]
-    kms_recorridos = dato[1]
+#cliente: [vehiculo, kms_recorridos]
+def calcular_facturacion(cliente):
+    vehiculo = cliente[0]
+    kms_recorridos = cliente[1]
 
     kms_cotizacion_media = 0
     kms_cotizacion_alta = 0
@@ -86,7 +93,26 @@ def calcular_facturacion(dato):
             facturacion += datos_cotizacion[i][4] * kms_cotizacion_alta
             return facturacion
 
+#Función para ordenar descendentemente resumenes de clientes por facturación
+#datos: [vehiculo, kms_recorridos, costos, facturacion][]
+def ordenar_resumen_clientes(datos):
+    cantidad_clientes = len(datos)
+
+    for i in range(cantidad_clientes - 1):
+        for j in range(i + 1, cantidad_clientes):
+            resumen_cliente_a = datos[i]
+            resumen_cliente_b = datos[j]
+            facturacion_a = resumen_cliente_a[3]
+            facturacion_b = resumen_cliente_b[3]
+            if facturacion_a < facturacion_b:
+                datos[i] = resumen_cliente_b
+                datos[j] = resumen_cliente_a
+
+    return datos
+
 #Función para generar datos aleatorios
+#min: numero
+#max: numero
 def generar_datos_aleatorios(min, max):
     datos_aleatorios = []
 
@@ -96,15 +122,16 @@ def generar_datos_aleatorios(min, max):
 
     for _ in range(cantidad_de_datos):
         vehiculo = vehiculos[random.randint(0, cantidad_de_tipos)]
-        km_recorridos = random.randint(100, 5000)
+        km_recorridos = random.randint(min_kms_recorridos, max_kms_recorridos)
 
         datos_aleatorios.append([vehiculo, km_recorridos])
 
     return datos_aleatorios
 
 #Función para agregar datos manuales
-def agregar_datos_manuales(datosIniciales):
-    datos = datosIniciales
+#clientes: [vehiculo, kms_recorridos][]
+def agregar_datos_manuales(clientes):
+    datos = clientes
 
     print("Ingrese los datos del cliente")
 
@@ -117,18 +144,19 @@ def agregar_datos_manuales(datosIniciales):
     return datos
 
 #Función para generar resumen
-def generar_resumen(datos):
+#clientes: [vehiculo, kms_recorridos][]
+def generar_resumen(clientes):
     print(" ")
     print("Resumen del mes")
     print(" ")
 
-    cantidad_vehiculos = len(datos)
+    cantidad_vehiculos = len(clientes)
     costos = 0
     facturacion = 0
 
-    for i in range(len(datos)):
-        costos += calcular_costo(datos[i])
-        facturacion += calcular_facturacion(datos[i])
+    for i in range(len(clientes)):
+        costos += calcular_costo(clientes[i])
+        facturacion += calcular_facturacion(clientes[i])
 
     print(f'Cantidad de vehículos: {cantidad_vehiculos}')
     print(f'Costos: {costos}')
@@ -136,17 +164,67 @@ def generar_resumen(datos):
     print(" ")  
 
 #Función para generar resumen por vehiculo
-def generar_resumen_por_vehiculo(datos):
-    #Agregar lógica
-    return datos
+#clientes: [vehiculo, kms_recorridos][]
+def generar_resumen_por_vehiculo(clientes):
+    print(" ")
+    print("Resumen del mes por vehículo")
+    print(" ")
+
+    cantidad_vehiculos = len(vehiculos)
+    resumen_vehiculos = []
+
+    for i in range(cantidad_vehiculos):
+        vehiculo = vehiculos[i]
+        kms_recorridos = 0
+        costos = 0
+        facturacion = 0
+
+        for cliente in clientes:
+            if cliente[0] == vehiculo:
+                kms_recorridos += cliente[1]
+                costos += calcular_costo(cliente)
+                facturacion += calcular_facturacion(cliente)
+
+        resumen_vehiculos.append([vehiculo, kms_recorridos, costos, facturacion])
+    
+    resumen_vehiculos = ordenar_resumen_clientes(resumen_vehiculos)
+
+    for i in range(cantidad_vehiculos):
+        print(f'Tipo de vehículo: {resumen_vehiculos[i][0]}')
+        print(f'Kilómetros recorridos: {resumen_vehiculos[i][1]}')
+        print(f'Costos: {resumen_vehiculos[i][2]}')
+        print(f'Facturación: {resumen_vehiculos[i][3]}')
+        print(" ")
 
 #Función para generar resumen por cliente
-def generar_resumen_por_cliente(datos):
-    #Agregar lógica
-    return datos
+#clientes: [vehiculo, kms_recorridos][]
+def generar_resumen_por_cliente(clientes):
+    print(" ")
+    print("Resumen del mes por cliente")
+    print(" ")
+
+    cantidad_clientes = len(clientes)
+    resumen_clientes = []
+
+    for i in range(cantidad_clientes):
+        cliente = clientes[i]
+        vehiculo = cliente[0]
+        kms_recorridos = cliente[1]
+        costos = 0
+        facturacion = calcular_facturacion(cliente)
+
+        resumen_clientes.append([vehiculo, kms_recorridos, costos, facturacion])
+    
+    resumen_clientes = ordenar_resumen_clientes(resumen_clientes)
+
+    for i in range(cantidad_clientes):
+        print(f'Tipo de vehículo: {resumen_clientes[i][0]}')
+        print(f'Facturación: {resumen_clientes[i][3]}')
+        print(" ")
 
 #Función para generar resumen de un vehiculo
-def generar_resumen_de_vehiculo(datos):
+#clientes: [vehiculo, kms_recorridos][]
+def generar_resumen_de_vehiculo(clientes):
     print("Resumen del mes de un vehículo")
     print(" ")
     print("Seleccione el tipo de vehículo: ")
@@ -156,24 +234,24 @@ def generar_resumen_de_vehiculo(datos):
         print(f'{i + 1}. {vehiculos[i]}')
 
     print(" ")
-    numero_vehiculo = input("Ingrese número de vehículo a seleccionar: ")
+    numero_vehiculo = int(input("Ingrese número de vehículo a seleccionar: "))
 
-    if (int(numero_vehiculo) <= 0 or int(numero_vehiculo) > len(vehiculos)):
+    if (numero_vehiculo <= 0 or numero_vehiculo > len(vehiculos)):
         print(" ")
         print("Número de vehículo incorrecto")
-        return generar_resumen_de_vehiculo(datos)
+        return generar_resumen_de_vehiculo(clientes)
     
-    vehiculo = vehiculos[(int(numero_vehiculo) - 1)]
+    vehiculo = vehiculos[(numero_vehiculo - 1)]
 
     cantidad_vehiculos = 0
     costos = 0
     facturacion = 0
 
-    for i in range(len(datos)):
-        if datos[i][0] == vehiculo:
+    for i in range(len(clientes)):
+        if clientes[i][0] == vehiculo:
             cantidad_vehiculos += 1
-            costos += calcular_costo(datos[i])
-            facturacion += calcular_facturacion(datos[i])
+            costos += calcular_costo(clientes[i])
+            facturacion += calcular_facturacion(clientes[i])
         
     print(" ")
     print(f'Cantidad de vehículos: {cantidad_vehiculos}')
@@ -207,7 +285,7 @@ def menu():
             print(" ")
             print("Generar datos del mes")
             print(" ")
-            datos = generar_datos_aleatorios(200, 450)
+            datos = generar_datos_aleatorios(min_clientes, max_clientes)
             print('Datos generados correctamente')
             print(f'Cantidad de clientes: {len(datos)}')
             print(" ")
