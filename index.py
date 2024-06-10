@@ -26,21 +26,18 @@ for i in range(len(datos_cotizacion)):
 
 #Función para obtener el tipo de vehículo del usuario
 def obtener_tipo_vehiculo():
-    print(" ")
-    print("Seleccione el tipo de vehículo:")
+    print("\nSeleccione el tipo de vehículo:")
 
     cantidad_de_tipos = len(vehiculos)
 
     for i in range(cantidad_de_tipos):
         print(f'{i + 1}. {vehiculos[i]}')
 
-    print(" ")
-    vehiculo_seleccionado = input("Ingrese número de vehículo a seleccionar: ")
+    vehiculo_seleccionado = input("\nIngrese número de vehículo a seleccionar: ")
     numero_vehiculo = int(vehiculo_seleccionado)
 
     if (numero_vehiculo <= 0 or numero_vehiculo > cantidad_de_tipos):
-        print(" ")
-        print("Número de vehículo inválido")
+        print("\nNúmero de vehículo inválido")
         return obtener_tipo_vehiculo()
 
     vehiculo = vehiculos[(numero_vehiculo - 1)]
@@ -49,12 +46,10 @@ def obtener_tipo_vehiculo():
 
 #Función para obtener el recorrido en km del usuario
 def obtener_kms():
-    print(" ")
-    kms = input("Ingrese la cantidad de kilómetros recorridos con el vehículo: ")
+    kms = input("\nIngrese la cantidad de kilómetros recorridos con el vehículo: ")
 
     if (int(kms) < min_kms_recorridos or int(kms) > max_kms_recorridos):
-        print(" ")
-        print("Cantidad de kilómetros incorrecta")
+        print("\nCantidad de kilómetros incorrecta")
         return obtener_kms()
     
     return int(kms)
@@ -108,7 +103,7 @@ def ordenar_resumen_clientes(resumen_clientes):
                 resumen_clientes[i] = resumen_cliente_b
                 resumen_clientes[j] = resumen_cliente_a
 
-    return datos
+    return resumen_clientes
 
 #Función para generar datos aleatorios
 #min: numero
@@ -146,9 +141,7 @@ def agregar_datos_manuales(clientes):
 #Función para generar resumen
 #clientes: [vehiculo, kms_recorridos][]
 def generar_resumen(clientes):
-    print(" ")
-    print("Resumen del mes")
-    print(" ")
+    print("\nResumen del mes\n")
 
     cantidad_vehiculos = len(clientes)
     costos = 0
@@ -160,15 +153,12 @@ def generar_resumen(clientes):
 
     print(f'Cantidad de vehículos: {cantidad_vehiculos}')
     print(f'Costos: {costos}')
-    print(f'Facturación: {facturacion}')
-    print(" ")  
+    print(f'Facturación: {facturacion}\n')
 
 #Función para generar resumen por vehiculo
 #clientes: [vehiculo, kms_recorridos][]
 def generar_resumen_por_vehiculo(clientes):
-    print(" ")
-    print("Resumen del mes por vehículo")
-    print(" ")
+    print("\nResumen del mes por vehículo\n")
 
     cantidad_vehiculos = len(vehiculos)
     resumen_vehiculos = []
@@ -193,15 +183,12 @@ def generar_resumen_por_vehiculo(clientes):
         print(f'Tipo de vehículo: {resumen_vehiculos[i][0]}')
         print(f'Kilómetros recorridos: {resumen_vehiculos[i][1]}')
         print(f'Costos: {resumen_vehiculos[i][2]}')
-        print(f'Facturación: {resumen_vehiculos[i][3]}')
-        print(" ")
+        print(f'Facturación: {resumen_vehiculos[i][3]}\n')
 
 #Función para generar resumen por cliente
 #clientes: [vehiculo, kms_recorridos][]
 def generar_resumen_por_cliente(clientes):
-    print(" ")
-    print("Resumen del mes por cliente")
-    print(" ")
+    print("\nResumen del mes por cliente\n")
 
     cantidad_clientes = len(clientes)
     resumen_clientes = []
@@ -219,26 +206,22 @@ def generar_resumen_por_cliente(clientes):
 
     for i in range(cantidad_clientes):
         print(f'Tipo de vehículo: {resumen_clientes[i][0]}')
-        print(f'Facturación: {resumen_clientes[i][3]}')
-        print(" ")
+        print(f'Facturación: {resumen_clientes[i][3]}\n')
+        
 
 #Función para generar resumen de un vehiculo
 #clientes: [vehiculo, kms_recorridos][]
 def generar_resumen_de_vehiculo(clientes):
     print("Resumen del mes de un vehículo")
-    print(" ")
-    print("Seleccione el tipo de vehículo: ")
-    print(" ")
+    print("\nSeleccione el tipo de vehículo: \n")
 
     for i in range(len(vehiculos)):
         print(f'{i + 1}. {vehiculos[i]}')
 
-    print(" ")
-    numero_vehiculo = int(input("Ingrese número de vehículo a seleccionar: "))
+    numero_vehiculo = int(input("\nIngrese número de vehículo a seleccionar: "))
 
     if (numero_vehiculo <= 0 or numero_vehiculo > len(vehiculos)):
-        print(" ")
-        print("Número de vehículo incorrecto")
+        print("\nNúmero de vehículo incorrecto")
         return generar_resumen_de_vehiculo(clientes)
     
     vehiculo = vehiculos[(numero_vehiculo - 1)]
@@ -253,26 +236,21 @@ def generar_resumen_de_vehiculo(clientes):
             costos += calcular_costo(clientes[i])
             facturacion += calcular_facturacion(clientes[i])
         
-    print(" ")
-    print(f'Cantidad de vehículos: {cantidad_vehiculos}')
+    print(f'\nCantidad de vehículos: {cantidad_vehiculos}')
     print(f'Costos: {costos}')
     print(f'Facturación: {facturacion}')
 
 #Función para acceder al menu de la aplicación
 def menu():
-    print(" ")
-    print(" ")
-    print("Bienvenido a la aplicación de cotización de vehículos")
-    print(" ")
-    print("Seleccione una opción del menú:")
+    print("\n\nBienvenido a la aplicación de cotización de vehículos")
+    print("\nSeleccione una opción del menú:")
     print("1. Generar datos del mes")
     print("2. Ingresar datos manuales")
     print("3. Generar resumen del mes")
     print("4. Generar resumen del mes por vehiculo")
     print("5. Generar resumen del mes por cliente")
     print("6. Generar resumen del mes de un vehiculo")
-    print("7. Salir")
-    print(" ")
+    print("7. Salir\n")
 
     bandera = True
 
@@ -282,57 +260,37 @@ def menu():
         opcion = input("Ingrese una opción del menú: ")
 
         if opcion == '1':
-            print(" ")
-            print("Generar datos del mes")
-            print(" ")
+            print("\nGenerar datos del mes\n")
             datos = generar_datos_aleatorios(min_clientes, max_clientes)
             print('Datos generados correctamente')
-            print(f'Cantidad de clientes: {len(datos)}')
-            print(" ")
+            print(f'Cantidad de clientes: {len(datos)}\n')
         elif opcion == '2':
-            print(" ")
-            print("Ingresar datos manuales")
-            print(" ")
+            print("\nIngresar datos manuales\n")
             datos = agregar_datos_manuales(datos)
             print('Datos agregados correctamente')
-            print(f'Datos: {datos[len(datos) - 1]}')
-            print(" ")
+            print(f'Datos: {datos[len(datos) - 1]}\n')
         elif opcion == '3':
-            print(" ")
-            print("Generar resumen del mes")
-            print(" ")
+            print("\nGenerar resumen del mes\n")
             generar_resumen(datos)
         elif opcion == '4':
-            print(" ")
-            print("Generar resumen del mes por vehiculo")
-            print(" ")
+            print("\nGenerar resumen del mes por vehiculo\n")
             generar_resumen_por_vehiculo(datos)
         elif opcion == '5':
-            print(" ")
-            print("Generar resumen del mes por cliente")
-            print(" ")
+            print("\nGenerar resumen del mes por cliente\n")
             generar_resumen_por_cliente(datos)
         elif opcion == '6':
-            print(" ")
-            print("Generar resumen del mes de un vehiculo")
-            print(" ")
+            print("\nGenerar resumen del mes de un vehiculo\n")
             generar_resumen_de_vehiculo(datos)
         elif opcion == '7':
-            print(" ")
-            print("Salir")
-            print(" ")
+            print("\nSalir")
             bandera = False
         elif opcion == '8':
             print(datos)
         else:
-            print(" ")
-            print("Opción incorrecta")
-            print(" ")
+            print("\nOpción incorrecta\n")
             menu()
     
-    print(" ")
-    print("Gracias por utilizar la aplicación")
-    print(" ")
+    print("\nGracias por utilizar la aplicación\n")
 
     return
 
